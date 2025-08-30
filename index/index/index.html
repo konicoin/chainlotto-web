@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChainLotto — Sorteios em Cripto, Transparentes e Seguros</title>
+  <meta name="description" content="Compre bilhetes com criptomoedas e concorra a prêmios. Tudo registrado na blockchain, transparente e imutável.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1c;
+      --panel:#141b2d;
+      --muted:#9fb0c3;
+      --line:#1f2740;
+      --primary:#00e0ff;
+      --primary-2:#00ffa3;
+      --gold:#ffd700;
+      --white:#ffffff;
+      --ok:#17d18b;
+      --danger:#ff4d4d;
+      --shadow:0 0 30px rgba(0,224,255,.14);
+      --radius:16px;
+      --radius-sm:12px;
+      --radius-xs:10px;
+      --max:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
+      background: radial-gradient(1200px 600px at 70% -10%, rgba(0,224,255,.08), transparent 60%),
+                  radial-gradient(800px 400px at 0% 100%, rgba(0,255,163,.06), transparent 60%), var(--bg);
+      color:var(--white);
+      line-height:1.55;
+    }
+    /* header */
+    .wrap{max-width:var(--max); margin:auto; padding:0 20px}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(8px);
+      background:linear-gradient(to bottom, rgba(10,15,28,.8), rgba(10,15,28,.4));
+      border-bottom:1px solid rgba(0,224,255,.12);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; height:70px;
+    }
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--white)}
+    .logo{
+      width:40px; height:40px; border-radius:10px; background:
+        linear-gradient(135deg, var(--primary), var(--primary-2));
+      display:grid; place-items:center; box-shadow:var(--shadow);
+      position:relative; overflow:hidden;
+    }
+    .logo:before{
+      content:""; position:absolute; inset:0; background:
+        conic-gradient(from 0deg, transparent, rgba(255,255,255,.2), transparent 30%);
+      mix-blend-mode:overlay;
+    }
+    .brand strong{font-weight:800; letter-spacing:.2px}
+    nav ul{display:flex; gap:18px; padding:0; margin:0; list-style:none}
+    nav a{color:var(--muted); text-decoration:none; font-weight:600}
+    nav a:hover{color:var(--white)}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      height:42px; padding:0 18px; border-radius:12px; font-weight:700; cursor:pointer; text-decoration:none;
+      background:linear-gradient(90deg, var(--primary), var(--primary-2)); color:#04131a; border:0;
+      box-shadow:var(--shadow); transition:transform .12s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.outline{
+      background:transparent; color:var(--primary); border:1px solid rgba(0,224,255,.45);
+      box-shadow:none;
+    }
+
+    /* hero */
+    .hero{padding:64px 0 40px; border-bottom:1px solid var(--line)}
+    .hero-grid{display:grid; grid-template-columns:1.2fr .8fr; gap:32px; align-items:center}
+    .kicker{color:var(--primary); font-weight:800; letter-spacing:.18em; text-transform:uppercase; font-size:.78rem}
+    h1{font-size:clamp(1.8rem, 3.6vw, 3rem); margin:.25rem 0 1rem}
+    .lead{color:#cfe6f3; font-size:1.05rem; max-width:52ch}
+    .hero-art{
+      height:280px; border-radius:var(--radius); background:
+        linear-gradient(180deg, rgba(0,224,255,.08), rgba(0,255,163,.06)),
+        radial-gradient(400px 220px at 30% 20%, rgba(0,224,255,.25), transparent 60%),
+        radial-gradient(400px 220px at 70% 80%, rgba(0,255,163,.2), transparent 60%),
+        #0e1426;
+      border:1px solid rgba(0,224,255,.18);
+      position:relative; overflow:hidden;
+    }
+    .mesh{
+      position:absolute; inset:0; opacity:.18;
+      background-image:
+        linear-gradient(transparent 24px, rgba(255,255,255,.06) 25px),
+        linear-gradient(90deg, transparent 24px, rgba(255,255,255,.06) 25px);
+      background-size:25px 25px;
+    }
+    .cta-row{display:flex; gap:14px; margin-top:18px; flex-wrap:wrap}
+
+    /* sections */
+    section{padding:56px 0}
+    .section-title{font-size:1.5rem; margin:0 0 22px}
+    .muted{color:var(--muted)}
+
+    /* features (3 pilares) */
+    .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px}
+    .feature{
+      background:var(--panel); border:1px solid rgba(0,224,255,.12); border-radius:var(--radius-sm); padding:18px;
+    }
+    .feature .ico{
+      width:38px; height:38px; border-radius:10px; display:grid; place-items:center; margin-bottom:8px;
+      background:rgba(0,224,255,.12); color:var(--primary);
+      font-weight:900;
+    }
+    .feature h3{margin:6px 0 6px; font-size:1.05rem}
+
+    /* cards sorteios */
+    .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
+    .card{
+      background:linear-gradient(180deg, rgba(20,27,45,1), rgba(20,27,45,.9));
+      border:1px solid rgba(0,224,255,.16); border-radius:var(--radius); padding:18px; position:relative;
+    }
+    .badge{
+      position:absolute; top:14px; right:14px; font-size:.74rem; color:#02151a;
+      background:linear-gradient(90deg, var(--primary), var(--primary-2));
+      padding:6px 10px; border-radius:999px; font-weight:800;
+    }
+    .price{font-weight:800; font-size:1.1rem}
+    .prize{color:var(--gold); font-weight:800; margin:6px 0 8px}
+    .meta{display:flex; justify-content:space-between; color:var(--muted); font-size:.92rem}
+    .progressbar{height:10px; background:#222a44; border-radius:999px; overflow:hidden; margin:12px 0}
+    .progress{height:100%; width:0; background:linear-gradient(90deg, var(--primary), var(--primary-2))}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .row .btn{flex:1}
+    .tiny{font-size:.8rem; color:var(--muted)}
+
+    /* como funciona */
+    .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px}
+    .step{background:var(--panel); border:1px solid rgba(0,224,255,.12); border-radius:var(--radius-sm); padding:18px}
+    .step h4{margin:6px 0 8px}
+
+    /* resultados */
+    .results{border:1px solid rgba(0,224,255,.12); border-radius:var(--radius); overflow:hidden}
+    .results table{width:100%; border-collapse:collapse; background:var(--panel)}
+    .results th,.results td{padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left}
+    .hash{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color:#bfe9ff}
+
+    /* footer */
+    footer{border-top:1px solid var(--line); padding:30px 0; color:var(--muted); font-size:.92rem}
+
+    /* responsive tweak */
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr}
+      .hero-art{order:-1; height:220px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .btn{transition:none}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#">
+        <span class="logo" aria-hidden="true">🎟️</span>
+        <strong>ChainLotto</strong>
+      </a>
+      <nav aria-label="principal">
+        <ul>
+          <li><a href="#como-funciona">Como Funciona</a></li>
+          <li><a href="#ativos">Sorteios</a></li>
+          <li><a href="#resultados">Resultados</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="btn" id="btnConnect" aria-label="Conectar carteira">Conectar Carteira</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker">Sorteios on-chain</div>
+        <h1>Sorteios em cripto. <br>Simples, seguros e transparentes.</h1>
+        <p class="lead">Compre bilhetes com criptomoedas e concorra a prêmios semanais. Vendas, sorteio e pagamento
+          com registro na blockchain e links públicos de transação.</p>
+        <div class="cta-row">
+          <a class="btn" href="#ativos">Comprar Bilhete Agora</a>
+          <a class="btn outline" href="#como-funciona">Como funciona</a>
+        </div>
+      </div>
+      <div class="hero-art" role="img" aria-label="Fundo tecnológico">
+        <div class="mesh"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 PILARES -->
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">Por que confiar?</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="ico">🔒</div>
+          <h3>Segurança Blockchain</h3>
+          <p class="muted">Todas as compras e pagamentos com prova on-chain e consulta pública.</p>
+        </div>
+        <div class="feature">
+          <div class="ico">⚖️</div>
+          <h3>Justiça Verificada</h3>
+          <p class="muted">Sorteios disparam ao vender 100% dos bilhetes; randomness auditável (VRF opcional).</p>
+        </div>
+        <div class="feature">
+          <div class="ico">⚡</div>
+          <h3>Pagamentos Rápidos</h3>
+          <p class="muted">Prêmios enviados em cripto diretamente para a carteira vencedora.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SORTEIOS ATIVOS -->
+  <section id="ativos">
+    <div class="wrap">
+      <h2 class="section-title">Sorteios Ativos</h2>
+      <p class="muted" style="margin-top:-8px; margin-bottom:18px">O sorteio acontece assim que <strong>todos os bilhetes</strong> forem vendidos.</p>
+
+      <div class="cards" id="cards">
+        <!-- os cards são preenchidos via JS com os dados abaixo -->
+      </div>
+      <p class="tiny">* Chances exibidas para compra de 1 bilhete. Comprar mais bilhetes aumenta proporcionalmente a probabilidade.</p>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="wrap">
+      <h2 class="section-title">Como funciona</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="ico">1</div>
+          <h4>Conecte sua carteira</h4>
+          <p class="muted">Conecte Metamask/WalletConnect. Nenhum dado pessoal — só sua carteira.</p>
+        </div>
+        <div class="step">
+          <div class="ico">2</div>
+          <h4>Compre seus bilhetes</h4>
+          <p class="muted">Escolha a sala ($1, $5, $10, $20 ou Premium $100) e a quantidade.</p>
+        </div>
+        <div class="step">
+          <div class="ico">3</div>
+          <h4>Sorteio automático</h4>
+          <p class="muted">Ao atingir 100% vendido, o sorteio roda e o prêmio é enviado ao vencedor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="resultados">
+    <div class="wrap">
+      <h2 class="section-title">Transparência & Resultados</h2>
+      <div class="results">
+        <table aria-label="Resultados anteriores">
+          <thead>
+          <tr>
+            <th>Sorteio</th><th>Prêmio</th><th>Vencedor</th><th>Tx Hash</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Exemplo de linhas (troque pelos reais) -->
+          <tr><td>#042</td><td>$10.000</td><td>0x92b…3fA</td><td class="hash">0x7f51…d2a9</td></tr>
+          <tr><td>#041</td><td>$10.000</td><td>0x1Af…9D2</td><td class="hash">0xa31c…8b70</td></tr>
+          <tr><td>#040</td><td>$50.000</td><td>0xc7E…11B</td><td class="hash">0x55d0…44c1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tiny" style="margin-top:10px">Links on-chain: em produção, cada hash aponta para o explorador (BscScan/Etherscan, etc.).</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contato">
+    <div class="wrap" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between">
+      <div>© <span id="year"></span> ChainLotto. Todos os direitos reservados.</div>
+      <div>Termos • Política • <a href="#" style="color:var(--primary)">Telegram</a> • <a href="#" style="color:var(--primary)">Twitter/X</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ========= DADOS (edite aqui) =========
+    const ROOMS = [
+      { name:"Bilhete $1", price:1,   prize:10000, total:12500, sold:5000,  tag:"Popular", chanceDen:12500 },
+      { name:"Bilhete $5", price:5,   prize:10000, total:2500,  sold:1845,  tag:"Equilíbrio", chanceDen:2500 },
+      { name:"Bilhete $10",price:10,  prize:10000, total:1250,  sold:690,   tag:"Mais chances", chanceDen:1250 },
+      { name:"Bilhete $20",price:20,  prize:10000, total:625,   sold:375,   tag:"Alta prob.", chanceDen:625 },
+      { name:"Premium $100",price:100, prize:50000,total:625,   sold:156,   tag:"Jackpot", chanceDen:625 }
+    ];
+    // ======================================
+
+    const $cards = document.querySelector('#cards');
+    const toMoney = v => `$${v.toLocaleString('en-US')}`;
+    const toPct = (sold,total)=> Math.max(0, Math.min(100, Math.round((sold/total)*100)));
+
+    function renderCards(){
+      $cards.innerHTML = ROOMS.map((r,i)=>{
+        const pct = toPct(r.sold,r.total);
+        const chance = `1 em ${r.chanceDen.toLocaleString('pt-BR')}`;
+        return `
+        <article class="card" aria-label="${r.name}">
+          <div class="badge">${r.tag}</div>
+          <div class="price">${r.name}</div>
+          <div class="prize">Prêmio: ${toMoney(r.prize)}</div>
+          <div class="meta">
+            <div>Total: <strong>${r.total.toLocaleString('pt-BR')}</strong></div>
+            <div>Chance: <strong>${chance}</strong></div>
+          </div>
+          <div class="progressbar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress" style="width:${pct}%"></div>
+          </div>
+          <div class="meta">
+            <div>Vendidos: <strong>${r.sold.toLocaleString('pt-BR')}</strong></div>
+            <div>Faltam: <strong>${(r.total - r.sold).toLocaleString('pt-BR')}</strong></div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" onclick="buy(${i})">Comprar Bilhete</button>
+            <button class="btn outline" onclick="details(${i})">Detalhes</button>
+          </div>
+          <p class="tiny" style="margin-top:10px">Sorteio dispara ao atingir 100% dos bilhetes.</p>
+        </article>`;
+      }).join('');
+    }
+
+    function buy(index){
+      // TODO: integrar Web3 aqui (abrir modal, escolher qtde, assinar tx)
+      const r = ROOMS[index];
+      alert(`Comprar bilhetes em: ${r.name}\nPreço por bilhete: $${r.price}\n(Integrar Web3 aqui)`);
+    }
+    function details(index){
+      const r = ROOMS[index];
+      alert(`${r.name}\nPrêmio: $${r.prize.toLocaleString('en-US')}\nTotal: ${r.total}\nVendidos: ${r.sold}`);
+    }
+
+    document.querySelector('#btnConnect').addEventListener('click', ()=>{
+      // TODO: conectar carteira (Metamask / WalletConnect)
+      alert('Conectar Carteira (integrar Web3 aqui)');
+    });
+
+    // data
+    renderCards();
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
